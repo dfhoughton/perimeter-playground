@@ -32,7 +32,7 @@ it, you can open the `test.html` file and play with the code. It compiles to abo
 
 ## Dedication
 
-This project is dedicated, like all my projects, to my son Jude, known on github as Turkey McMac. He would have appreciated this
+This project is dedicated, like all my projects, to my son Jude, known on github as [TurkeyMcMac]( https://github.com/TurkeyMcMac). He would have appreciated this
 more than anyone. It's the sort of thing he might have done himself. He would have done it better and with less gassing about.
 
 I miss you, Jude. You were the best person I've ever known. I love you.
