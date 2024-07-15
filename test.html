@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Perimeter Playground</title>
+    <meta charset="UTF-8" />
+    <style type="text/css">
+      body {
+        padding: 5rem 10rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      .central {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      #rodeo {
+        border: 2px solid goldenrod;
+      }
+      #buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 5rem;
+      }
+      #columns {
+        display: flex;
+        gap: 1rem;
+      }
+      .col {
+        h2 {
+          text-align: center;
+        }
+        width: 15rem;
+      }
+    </style>
+    <script src="bundle.js"></script>
+  </head>
+  <body>
+    <h1>Perimeter Playground</h1>
+    <div id="columns">
+      <div class="col">
+        <h2>Events</h2>
+        <div id="events"></div>
+      </div>
+      <div class="central">
+        <canvas id="rodeo" width="700" height="700">
+          I'm sorry, it appears you aren't seeing the canvas. That's the whole
+          point.
+        </canvas>
+        <div id="buttons">
+          <button id="clear">clear</button>
+          <button id="go">go</button>
+        </div>
+      </div>
+      <div class="col">
+        <h2>Points</h2>
+        <div id="points"></div>
+      </div>
+    </div>
+  </body>
+</html>

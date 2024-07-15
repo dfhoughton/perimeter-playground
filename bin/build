@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo "building perimeter playground"
+
+esbuild --bundle src/main.ts --outfile=bundle.js
+

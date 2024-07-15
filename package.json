@@ -1,0 +1,19 @@
+{
+    "name": "perimeter-playground",
+    "version": "0.1",
+    "description": "Graphical tutorial concerning polygons.",
+    "scripts": {
+        "test": "jest --config jestconfig.json",
+        "build": "esbuild --bundle src/main.ts --outfile=bundle.js"
+    },
+    "keywords": [],
+    "author": {
+        "name": "David F. Houghton",
+        "url": "https://github.com/dfhoughton"
+    },
+    "devDependencies": {
+        "@types/jest": "^29.5.12",
+        "jest": "^29.7.0",
+        "ts-jest": "^29.1.3"
+    }
+}
