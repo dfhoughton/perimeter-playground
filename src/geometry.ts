@@ -628,7 +628,7 @@ export const findCrossings = (segments: Segment[]): Set<Segment> => {
       if (i === 0 && j === last) continue;
 
       const s2 = segments[j];
-      if (s1.a.equals(s2.a) || s1.a.equals(s2.b) || s1.b.equals(s1.a) || s1.b.equals(s2.b)) continue;
+      if (s1.a.equals(s2.a) || s1.a.equals(s2.b) || s1.b.equals(s2.a) || s1.b.equals(s2.b)) continue;
       const p = s1.intersection(s2);
       const debug = () => {
         console.log({

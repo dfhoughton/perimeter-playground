@@ -23,7 +23,7 @@ const points: [number, number][] = [];
 function main() {
   const canvas = document.getElementById("rodeo") as HTMLCanvasElement;
   const tutor = new GraphicalTutor(canvas, {
-    delay: 50,
+    delay: 200,
     scale: 10,
     color: "crimson",
   });
