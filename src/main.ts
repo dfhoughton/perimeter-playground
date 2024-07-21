@@ -23,7 +23,7 @@ const points: [number, number][] = [];
 function main() {
   const canvas = document.getElementById("rodeo") as HTMLCanvasElement;
   const tutor = new GraphicalTutor(canvas, {
-    delay: 200,
+    delay: 50,
     scale: 10,
     color: "crimson",
   });
@@ -201,8 +201,8 @@ function main() {
       depth = 0;
     }
     const curvature = determineConvexDirection(segments);
-    if (depth! > 50) debugger;
-    if (segments.length < 3) debugger;
+    if (depth! > 50) throw 'improbably level of recursion';
+    if (segments.length < 3) throw 'insufficient segments';
     // do one cycle, possible recursing
     const prospect = (
       s1: Segment,
@@ -234,7 +234,7 @@ function main() {
         return null;
       }
     };
-    for (let i = 0, j = 1; i < segments.length - 1; i++, j++) {
+    for (let i = 0, j = 1; i < segments.length; i++, j++) {
       if (j === segments.length) j = 0;
       const s1 = segments[i];
       let s2 = segments[j];
