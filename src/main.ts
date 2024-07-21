@@ -246,7 +246,7 @@ function main() {
       for (let k = j + 1, count = 0; ; k++) {
         if (k === segments.length) {
           if (count > 0) {
-            debugger;
+            throw 'we have hit an infinite loop while looking for concavities';
           }
           k = 0;
           count++;
