@@ -23,7 +23,7 @@ const points: [number, number][] = [];
 function main() {
   const canvas = document.getElementById("rodeo") as HTMLCanvasElement;
   const tutor = new GraphicalTutor(canvas, {
-    delay: 50,
+    delay: 25,
     scale: 10,
     color: "crimson",
   });
@@ -165,8 +165,8 @@ function main() {
     }
     const [p, w] = centroids[0];
     // make a sort of bullseye
-    tutor.addFrame([new Circle(p, 1)], {color: 'red'})
-    tutor.addFrame([new Circle(p, 0.5)], {color: 'white'})
+    tutor.addFrame([new Circle(p, 1)], { color: "red" });
+    tutor.addFrame([new Circle(p, 0.5)], { color: "white" });
     tutor.addFrame([p], {
       color: "blue",
       after: () => {
@@ -190,90 +190,107 @@ function main() {
     }
     return centroids;
   };
+  // make sure the given segment doesn't cross any of the other segments
+  const noCrossings = (
+    prospectiveSplittingSegment: Segment,
+    segments: Segment[]
+  ) =>
+    segments.every(
+      (s) =>
+        s.intersection(prospectiveSplittingSegment) === null ||
+        s.a.equals(prospectiveSplittingSegment.a) ||
+        s.a.equals(prospectiveSplittingSegment.b) ||
+        s.b.equals(prospectiveSplittingSegment.a) ||
+        s.b.equals(prospectiveSplittingSegment.b)
+    );
+  // check to see whether a given pair of adjoining segments suits the current convexity
+  // if we are hiving, we're looking for a splitting segment to improve the current convexity
+  // otherwise, we are just confirming that the angle maintains the convexity
+  const prospect = (
+    curvature: Curvature,
+    segments: Segment[],
+    s1: Segment,
+    s2: Segment,
+    hiving: boolean // whether we're looking for a splitting segment
+  ): Segment | null => {
+    const v1 = s1.toVector();
+    const s3 = new Segment(v1.end(), s2.b);
+    const v2 = s3.toVector();
+    const c = v1.curvature(v2);
+    const assemblage = [v1.start(), s1, v1.end(), s3, v2.end()];
+    if (c === curvature && (!hiving || noCrossings(s3, segments))) {
+      tutor.addFrame(assemblage, {
+        color: hiving ? "green" : "orange",
+        once: hiving ? false : true,
+      });
+      return s3;
+    } else {
+      tutor.addFrame(assemblage, { color: "red", once: true });
+      return null;
+    }
+  };
   const findConvexities = (
     segments: Segment[],
     convexities?: Segment[][],
-    depth?: number
+    depth?: number,
+    curvature?: Curvature,
   ): Segment[][] => {
     if (!convexities) {
       // initialize the recursion
-      convexities = [segments];
+      convexities = [segments]; // assume our initial perimeter is convex
       depth = 0;
+      curvature = determineConvexDirection(segments);
     }
-    const curvature = determineConvexDirection(segments);
-    if (depth! > 50) throw 'improbably level of recursion';
-    if (segments.length < 3) throw 'insufficient segments';
-    // do one cycle, possible recursing
-    const prospect = (
-      s1: Segment,
-      s2: Segment,
-      hiving: boolean
-    ): Segment | null => {
-      const v1 = s1.toVector();
-      const s3 = new Segment(v1.end(), s2.b);
-      const v2 = s3.toVector();
-      const c = v1.curvature(v2);
-      const assemblage = [v1.start(), s1, v1.end(), s3, v2.end()];
-      const noCrossings = () =>
-        segments.every(
-          (s) =>
-            s.intersection(s3) === null ||
-            s.a.equals(s3.a) ||
-            s.a.equals(s3.b) ||
-            s.b.equals(s3.a) ||
-            s.b.equals(s3.b)
-        );
-      if (c === curvature && noCrossings()) {
-        tutor.addFrame(assemblage, {
-          color: hiving ? "green" : "orange",
-          once: hiving ? false : true,
-        });
-        return s3;
-      } else {
-        tutor.addFrame(assemblage, { color: "red", once: true });
-        return null;
-      }
-    };
+    if (depth! > 50) throw "improbable level of recursion";
+    if (segments.length < 3) throw "insufficient segments";
+    if (segments.length === 3) return convexities; // a triangle is always convex
+    // do one cycle, possibly recursing
+    // i and j are the indices of adjoining segments; we measure the curvature between them
     for (let i = 0, j = 1; i < segments.length; i++, j++) {
       if (j === segments.length) j = 0;
       const s1 = segments[i];
       let s2 = segments[j];
-      let s3 = prospect(s1, s2, false);
+      let s3 = prospect(curvature!, segments, s1, s2, false);
       if (s3) continue;
       // we've found a concavity; hive it off
       const newConvexity: Segment[] = [s2];
       convexities.push(newConvexity);
+      // k is the index of a subsequent segment; we measure the curvature between the first segment
+      // and a synthesized segment beginning at the head of i and ending at the head of k
+      // if the curvature is what we want and this segments crosses no other segments, we use it to split
+      // the initial perimeter into two perimeters that are more convex
       for (let k = j + 1, count = 0; ; k++) {
         if (k === segments.length) {
-          if (count > 0) {
-            throw 'we have hit an infinite loop while looking for concavities';
-          }
+          if (count > 0) throw "we have hit an infinite loop while trying to hive off a concavity";
           k = 0;
           count++;
         }
         s2 = segments[k];
         newConvexity.push(s2);
-        s3 = prospect(s1, s2, true);
+        s3 = prospect(curvature!, segments, s1, s2, true);
         if (s3) {
           // we've found the splitting segment which will hive off the concavity
           // splice the old segments and add this splitting segment to both
-          if (k > i) {
+          if (k > i || j === 0) {
             // we haven't looped. Phew!
             segments.splice(j, newConvexity.length, s3);
           } else {
             // dammit, we've looped
-            segments.splice(j, segments.length - j, s3);
+            // remove the segments in the new convexity; add in the splitting segment
+            segments.splice(j, newConvexity.length - k - 1, s3);
+            // a few of the segments in the new convexity are from the beginning of the list
             segments.splice(0, k + 1);
           }
           // recurse
           newConvexity.push(s3.reverse());
-          findConvexities(newConvexity, convexities, depth! + 1);
+          findConvexities(newConvexity, convexities, depth! + 1, curvature);
           break; // go back to the main loop;
         }
       }
     }
     return convexities;
   };
+  // pull out all and only the segments from the assemblages enqueued to represent the perimeter
   const findAllSegments = () =>
     tutor.current
       .map((pair) => pair[0]!.find((g) => g.type() === GeometryType.Segment))
