@@ -341,7 +341,7 @@ export class Vector extends Segment {
   end(): Point {
     return this.b;
   }
-  // as you move from the start of this vector to the end of the next, which why are you rotating?
+  // as you move from the start of this vector to the end of the next, which way are you rotating?
   // hopefully this is computationally cheaper than doing any trigonometry
   curvature(other: Vector): Curvature {
     if (!this.end().equals(other.start()))
