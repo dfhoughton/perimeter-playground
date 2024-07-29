@@ -52,6 +52,8 @@ function main() {
     let lastPoint: [number, number] | null = null;
     if (points.length) lastPoint = points[points.length - 1];
     const point = tutor.cartesian(e.offsetX, e.offsetY);
+    // if  this is a double-click on the same point, ignore it
+    if (lastPoint && point[0] === lastPoint[0] && point[1] === lastPoint[1]) return;
     const [x, y] = point;
     notePoint(x, y);
     points.push(point);
