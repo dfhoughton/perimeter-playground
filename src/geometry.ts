@@ -138,7 +138,11 @@ export class Segment extends Geometry {
   describe(): string {
     return `${this.a.describe()} - ${this.b.describe()}`;
   }
-  intersection(other: Segment): Segment | Point | null {
+  // the second, optional parameter is a workaround for floating point issues
+  intersection(
+    other: Segment,
+    trustMe: boolean = false
+  ): Segment | Point | null {
     if (this.maybeOverlaps(other)) {
       if (this.slope === other.slope) {
         if (this.intercept === other.intercept) {
@@ -249,7 +253,8 @@ export class Segment extends Geometry {
               (this.intercept! - other.intercept!) / (other.slope - this.slope);
             const y = this.slope * x + this.intercept!;
             const p = new Point(x, y);
-            if (p.maybeOverlaps(this) && p.maybeOverlaps(other)) return p;
+            if (trustMe || (this.maybeOverlaps(p) && other.maybeOverlaps(p)))
+              return p;
             return null;
           }
         }
@@ -533,7 +538,7 @@ export class Triangle extends Geometry {
     );
     const midlineAB = new Segment(c, this.ab.midpoint());
     const midlineAC = new Segment(b, this.ac.midpoint());
-    this.centroid = midlineAB.intersection(midlineAC) as Point;
+    this.centroid = midlineAB.intersection(midlineAC, true) as Point;
     // compile a function that returns whether a point falls within this triangle
     const makeInequality = (
       s: Segment,

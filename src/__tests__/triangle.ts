@@ -85,4 +85,38 @@ describe("Triangle", () => {
       });
     }
   });
+  // some regressions
+  const points: [x: number, y: number][] = [
+    [8, -10.8],
+    [2.7, -16.9],
+    [6, -4.7],
+  ];
+  describe("all permutations of the same 3 points give the same centroid", () => {
+    let commonCentroid: Point | null = null;
+    for (let i = 0; i < 3; i++) {
+      for (let j = i + 1, c1 = 0; c1 < 3; j++, c1++) {
+        if (j === 3) j = 0;
+        if (j === i) continue;
+        for (let k = j + 1, c2 = 0; c2 < 3; k++, c2++) {
+          if (k === 3) k = 0;
+          if (k === j || k === i) continue;
+          const t = new Triangle(
+            new Point(...points[i]),
+            new Point(...points[j]),
+            new Point(...points[k])
+          );
+          test(`${t.describe()} has a defined centroid`, () =>
+            expect(commonCentroid).not.toBeNull());
+          if (commonCentroid === null) {
+            commonCentroid = t.centroid;
+          } else {
+            test(`the x coordinate of the centroid of ${t.describe()} is ${commonCentroid.x()}`, () =>
+              expect(t.centroid.x()).toBeCloseTo(commonCentroid!.x()));
+            test(`the y coordinate of the centroid of ${t.describe()} is ${commonCentroid.y()}`, () =>
+              expect(t.centroid.y()).toBeCloseTo(commonCentroid!.y()));
+          }
+        }
+      }
+    }
+  });
 });
