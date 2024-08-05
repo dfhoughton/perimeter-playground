@@ -68,6 +68,9 @@ function main() {
     tutor.enqueue(assemblage, { color: "green" });
     tutor.drawAll();
   };
+  const describeAlgorithmStep = (step: string) => {
+    tutor.addFrame([], { after: () => event("", `❧ ${step}`), once: true });
+  };
   document.getElementById("go")!.onclick = () => {
     const c = document.getElementById("go")!;
     document.getElementById("events")!.innerHTML = "";
@@ -83,9 +86,21 @@ function main() {
       const p2 = new Point(x2, y2);
       tutor.enqueue([new Segment(p1, p2)], { color: "green" });
       tutor.drawAll();
+      describeAlgorithmStep("Removing Colinear Points");
       removeColinearities();
+      describeAlgorithmStep("Looking For Crossed Segments");
       if (screenForCrossings()) {
-        coalesceCentroids(findCentroids(findConvexities(findAllSegments())));
+        const segments = findAllSegments();
+        describeAlgorithmStep("Dividing Enclosed Area into Convex Shapes");
+        const convexities = findConvexities(segments);
+        tutor.addFrame([], {
+          once: true,
+          after: () => event(`convexities: ${convexities.length}`),
+        });
+        describeAlgorithmStep("Finding The Centroids of Interior Triangles");
+        const centroids = findCentroids(convexities);
+        describeAlgorithmStep("Coalescing Centroids");
+        coalesceCentroids(centroids);
         c.innerHTML = "stop";
         tutor.go(() => {
           c.innerHTML = "go";
@@ -144,10 +159,15 @@ function main() {
       j--;
     }
     if (removedPoints.length) {
-      event("colinear points removed", "Removed Points");
-      for (const p of removedPoints) {
-        event(p.describe());
-      }
+      tutor.addFrame([], {
+        once: true,
+        after: () => {
+          event("colinear points removed");
+          for (const p of removedPoints) {
+            event(p.describe());
+          }
+        },
+      });
       document.getElementById("points")!.innerHTML = "";
       for (const [ass, _] of tutor.current) {
         for (const g of ass) {
@@ -234,15 +254,14 @@ function main() {
   const findConvexities = (
     segments: Segment[],
     convexities?: Segment[][],
-    depth?: number,
-    curvature?: Curvature,
+    depth?: number
   ): Segment[][] => {
     if (!convexities) {
       // initialize the recursion
       convexities = [segments]; // assume our initial perimeter is convex
       depth = 0;
-      curvature = determineConvexDirection(segments);
     }
+    const curvature = determineConvexDirection(segments);
     if (depth! > 50) throw "improbable level of recursion";
     if (segments.length < 3) throw "insufficient segments";
     if (segments.length === 3) return convexities; // a triangle is always convex
@@ -263,7 +282,8 @@ function main() {
       // the initial perimeter into two perimeters that are more convex
       for (let k = j + 1, count = 0; ; k++) {
         if (k === segments.length) {
-          if (count > 0) throw "we have hit an infinite loop while trying to hive off a concavity";
+          if (count > 0)
+            throw "we have hit an infinite loop while trying to hive off a concavity";
           k = 0;
           count++;
         }
@@ -285,7 +305,7 @@ function main() {
           }
           // recurse
           newConvexity.push(s3.reverse());
-          findConvexities(newConvexity, convexities, depth! + 1, curvature);
+          findConvexities(newConvexity, convexities, depth! + 1);
           break; // go back to the main loop;
         }
       }

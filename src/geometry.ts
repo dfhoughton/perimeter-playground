@@ -308,6 +308,8 @@ export enum Curvature {
   Right = "right",
 }
 
+// not precisely a mathemantical vector -- a magnitude and a direction -- but rather
+// a segment, an oriented and located magnitude, with a one end designated the head
 export class Vector extends Segment {
   quadrant: Quadrant;
   constructor(start: Point, end: Point) {
@@ -577,7 +579,7 @@ export class Triangle extends Geometry {
   describe(): string {
     return `△(${this.a.describe()}, ${this.b.describe()}, ${this.c.describe()})`;
   }
-  // a convience method for testing
+  // a convenience method for testing
   clone(): Triangle {
     return new Triangle(this.a.clone(), this.b.clone(), this.c.clone());
   }
