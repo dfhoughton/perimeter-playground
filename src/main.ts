@@ -22,8 +22,13 @@ const points: [number, number][] = [];
 
 function main() {
   const canvas = document.getElementById("rodeo") as HTMLCanvasElement;
+  const delaySlider = document.getElementById("delay") as HTMLInputElement;
+  let delay = Number.parseFloat(delaySlider.value) * 1000;
+  delaySlider.onchange = (e: Event) => {
+    delay = Number.parseFloat((e.target as HTMLInputElement).value) * 1000;
+  };
   const tutor = new GraphicalTutor(canvas, {
-    delay: 25,
+    delay: () => delay,
     scale: 10,
     color: "crimson",
   });
@@ -179,6 +184,16 @@ function main() {
   const coalesceCentroids = (centroids: Centroid[]) => {
     while (centroids.length > 1) {
       const [c1, c2, ...rest] = centroids;
+      // somehow we sometimes get centroids with 0 area; we ignore them
+      if (c1[1] === 0 || c2[1] === 0) {
+        if (c1[1] === 0 && c2[1] === 0) continue;
+        if (c1[1] === 0) {
+          centroids = [c2, ...rest];
+        } else {
+          centroids = [c1, ...rest];
+        }
+        continue;
+      }
       centroids = rest;
       const [s, c] = centroid(c1, c2);
       const [p, _] = c;

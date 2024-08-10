@@ -9,7 +9,7 @@ import {
 } from "./geometry";
 
 export type GraphicalTutorOptions = {
-  delay?: number;
+  delay?: number | (() => number);
   color?: string;
   fill?: string;
   erasure?: string;
@@ -47,7 +47,7 @@ export class GraphicalTutor {
   interval: ReturnType<typeof setTimeout> | null;
   current: [Assemblage, DrawingOptions][];
   startState: [Assemblage, DrawingOptions][];
-  pending: [[Assemblage, DrawingOptions][], delay: number][];
+  pending: [[Assemblage, DrawingOptions][], delay: number | (() => number)][];
   going: boolean;
   onFinished: Array<() => void>;
 
@@ -69,11 +69,11 @@ export class GraphicalTutor {
   }
 
   incomplete() {
-    return this.pending.length > 0
+    return this.pending.length > 0;
   }
 
   paused() {
-    return !this.going && this.incomplete()
+    return !this.going && this.incomplete();
   }
 
   // restore things to their condition before the last time we "went"
@@ -85,10 +85,7 @@ export class GraphicalTutor {
   }
 
   // enqueue something for the current frame
-  enqueue(
-    assemblage: Assemblage,
-    options: Partial<DrawingOptions> = {}
-  ) {
+  enqueue(assemblage: Assemblage, options: Partial<DrawingOptions> = {}) {
     let { color, after } = options;
     color = options.color ?? (this.options.color as string);
     this.current.push([assemblage, { color, after }]);
@@ -97,7 +94,7 @@ export class GraphicalTutor {
   // add an assemblage to be drawn after a delay
   addFrame(
     assemblage: Assemblage,
-    options: Partial<DrawingOptions> & {delay?: number} = {}
+    options: Partial<DrawingOptions> & { delay?: number | (() => number) } = {}
   ) {
     let { delay, color, after, once } = options;
     delay ??= this.options.delay;
@@ -220,7 +217,7 @@ export class GraphicalTutor {
     if (this.incomplete()) {
       const [frame, delay] = this.pending.shift()!;
       this.current = frame;
-      this.interval = setTimeout(this.step.bind(this), delay);
+      this.interval = setTimeout(this.step.bind(this), typeof delay === "number" ? delay : delay());
     } else {
       this.clearInterval();
       this.going = false;
@@ -313,8 +310,8 @@ export class GraphicalTutor {
     ctx.lineTo(bx, by);
     ctx.lineTo(cx, cy);
     ctx.closePath();
-      ctx.fillStyle = color;
-      ctx.fill();
+    ctx.fillStyle = color;
+    ctx.fill();
     ctx.stroke();
   }
 }
