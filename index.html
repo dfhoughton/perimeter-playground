@@ -35,6 +35,14 @@
         }
         width: 15rem;
       }
+      #load-data {
+        width: 100%;
+        height: 10rem;
+      }
+      label {
+        font-size: larger;
+        font-weight: 600;
+      }
     </style>
     <script src="bundle.js"></script>
   </head>
@@ -46,7 +54,18 @@
         <div id="events"></div>
       </div>
       <div class="central">
-        <input type="range" id="delay" min="0" max="1" step="0.001" value="0.5" />
+        <label>
+          fast
+          <input
+            type="range"
+            id="delay"
+            min="0"
+            max="1"
+            step="0.001"
+            value="0.5"
+          />
+          slow
+        </label>
         <canvas id="rodeo" width="700" height="700">
           I'm sorry, it appears you aren't seeing the canvas. That's the whole
           point.
@@ -55,6 +74,17 @@
           <button id="clear">clear</button>
           <button id="go">go</button>
         </div>
+        <label for="load-data">Load a stored perimeter</label>
+        <textarea
+          id="load-data"
+          placeholder="(0, 0) (1, 1) (-1, 1) etc."
+        ></textarea>
+        <caption for="load-data">
+          Type or paste a list of points into the text area above. On "load",
+          these points will be entered in sequence as though you had added them
+          by clicking on the canvas.
+        </caption>
+        <button id="load" disabled>Load</button>
       </div>
       <div class="col">
         <h2>Points</h2>

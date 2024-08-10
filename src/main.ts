@@ -32,12 +32,13 @@ function main() {
     scale: 10,
     color: "crimson",
   });
-  document.getElementById("clear")!.onclick = () => {
+  const clear = () => {
     points.length = 0;
     document.getElementById("points")!.innerHTML = "";
     document.getElementById("events")!.innerHTML = "";
     tutor.clear();
   };
+  document.getElementById("clear")!.onclick = clear;
   // record an event
   const event = (message: string, header?: string) => {
     const events = document.getElementById("events")!;
@@ -51,12 +52,9 @@ function main() {
     container.appendChild(document.createTextNode(message));
     events.appendChild(container);
   };
-  canvas.onclick = (e) => {
-    if (!tutor.fresh()) return;
-
+  const addPoint = (point: [number, number]) => {
     let lastPoint: [number, number] | null = null;
     if (points.length) lastPoint = points[points.length - 1];
-    const point = tutor.cartesian(e.offsetX, e.offsetY);
     const [x, y] = point;
     // if  this is a double-click on the same point, ignore it
     if (lastPoint && x === lastPoint[0] && y === lastPoint[1]) return;
@@ -72,6 +70,26 @@ function main() {
     assemblage.push(newPoint);
     tutor.enqueue(assemblage, { color: "green" });
     tutor.drawAll();
+  };
+  canvas.onclick = (e) => {
+    if (!tutor.fresh()) return;
+    const point = tutor.cartesian(e.offsetX, e.offsetY);
+    addPoint(point);
+  };
+  const load = document.getElementById("load-data")! as HTMLTextAreaElement;
+  const loadButton = document.getElementById("load")! as HTMLButtonElement;
+  const pointMatcher = /\(\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\)/g;
+  load.onkeyup = (_e) => {
+    const pointsPresent = !!load.value.matchAll(pointMatcher).next().value;
+    if (loadButton.disabled === pointsPresent) {
+      loadButton.disabled = !pointsPresent;
+    }
+  };
+  loadButton.onclick = (_e) => {
+    clear();
+    for (const m of load.value.matchAll(pointMatcher)) {
+      addPoint([Number.parseFloat(m[1]), Number.parseFloat(m[2])]);
+    }
   };
   const describeAlgorithmStep = (step: string) => {
     tutor.addFrame([], { after: () => event("", `❧ ${step}`), once: true });
