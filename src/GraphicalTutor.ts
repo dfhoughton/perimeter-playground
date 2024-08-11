@@ -247,6 +247,7 @@ export class GraphicalTutor {
   }
 
   private drawItem(item: Geometry, color: string) {
+    if (!item) return; // apparently typescript is letting a null in; this is a gordian knot solution
     switch (item.type()) {
       case GeometryType.Point:
         this.drawPoint(item as Point, color);

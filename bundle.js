@@ -726,6 +726,7 @@
       this.drawItem(item, color);
     }
     drawItem(item, color) {
+      if (!item) return;
       switch (item.type()) {
         case 0 /* Point */:
           this.drawPoint(item, color);
