@@ -1,5 +1,9 @@
 # Perimeter Playground
 
+Draw pretty perimeters!
+
+![Screenshot of a simple perimeter.](https://github.com/dfhoughton/perimeter-playground/blob/main/documentation/screenshot.jpg?raw=true)
+
 This project is about visualizing algorithms, specifically algorithms relating to perimeters.
 
 It began because through work I suddenly became interested in the GPS perimeters of farms thanks to the EU Deforestation
@@ -16,7 +20,7 @@ into a binary search tree to rapidly determine whether the perimeter contained a
 I wanted to do these things, and I wanted to do them with algorithms which avoided as much as possible expensive transcendental
 functions -- trigonometry and square roots. And when I was done, I wanted to watch the algorithm work.
 
-So the code in this project consists of a GraphicalTutor, which fascilitates representing any algorithm as an animation, some
+So the code in this project consists of a `GraphicalTutor`, which fascilitates representing any algorithm as an animation, some
 general geometric classes -- point, segment, vector, triangle, circle -- and some algorithms specific to perimeters. The point
 is not to invent a better algorithm, since this is well-trodden ground, but to have fun reinventing algorithms, and to produce
 something one could use to explain these algorithms.
