@@ -356,122 +356,123 @@ export class Vector extends Segment {
     if (this.quadrant === Quadrant.Null || other.quadrant === Quadrant.Null)
       return Curvature.Colinear;
     if (this.slope === other.slope) return Curvature.Colinear;
+    // the cases in the switch statement have been ordered to test more likely matches first
     switch (this.quadrant) {
-      case Quadrant.PositiveX:
-        switch (other.quadrant) {
-          case Quadrant.PositiveX:
-          case Quadrant.NegativeX:
-            return Curvature.Colinear;
-          case Quadrant.I:
-          case Quadrant.PostiveY:
-          case Quadrant.II:
-            return Curvature.Left;
-          default:
-            return Curvature.Right;
-        }
       case Quadrant.I:
         switch (other.quadrant) {
+          case Quadrant.II:
+          case Quadrant.PostiveY:
+          case Quadrant.NegativeX:
+            return Curvature.Left;
           case Quadrant.I:
             return other.slope! > this.slope!
               ? Curvature.Left
               : Curvature.Right;
-          case Quadrant.PostiveY:
-          case Quadrant.II:
-          case Quadrant.NegativeX:
-            return Curvature.Left;
           case Quadrant.III:
             return other.slope! < this.slope!
               ? Curvature.Left
               : Curvature.Right;
-          default:
-            return Curvature.Right;
-        }
-      case Quadrant.PostiveY:
-        switch (other.quadrant) {
-          case Quadrant.PostiveY:
-          case Quadrant.NegativeY:
-            return Curvature.Colinear;
-          case Quadrant.II:
-          case Quadrant.NegativeX:
-          case Quadrant.III:
-            return Curvature.Left;
           default:
             return Curvature.Right;
         }
       case Quadrant.II:
         switch (other.quadrant) {
+          case Quadrant.III:
+          case Quadrant.NegativeX:
+          case Quadrant.NegativeY:
+            return Curvature.Left;
           case Quadrant.II:
             return other.slope! > this.slope!
               ? Curvature.Left
               : Curvature.Right;
-          case Quadrant.NegativeX:
-          case Quadrant.III:
-          case Quadrant.NegativeY:
-            return Curvature.Left;
           case Quadrant.IV:
             return other.slope! < this.slope!
               ? Curvature.Left
               : Curvature.Right;
+          default:
+            return Curvature.Right;
+        }
+      case Quadrant.III:
+        switch (other.quadrant) {
+          case Quadrant.IV:
+          case Quadrant.NegativeY:
+          case Quadrant.PositiveX:
+            return Curvature.Left;
+          case Quadrant.III:
+            return other.slope! > this.slope!
+              ? Curvature.Left
+              : Curvature.Right;
+          case Quadrant.I:
+            return other.slope! < this.slope!
+              ? Curvature.Left
+              : Curvature.Right;
+          default:
+            return Curvature.Right;
+        }
+      case Quadrant.IV:
+        switch (other.quadrant) {
+          case Quadrant.I:
+          case Quadrant.PositiveX:
+          case Quadrant.PostiveY:
+            return Curvature.Left;
+          case Quadrant.II:
+            return other.slope! < this.slope!
+              ? Curvature.Left
+              : Curvature.Right;
+          case Quadrant.IV:
+            return other.slope! > this.slope!
+              ? Curvature.Left
+              : Curvature.Right;
+          default:
+            return Curvature.Right;
+        }
+      case Quadrant.PositiveX:
+        switch (other.quadrant) {
+          case Quadrant.I:
+          case Quadrant.II:
+          case Quadrant.PostiveY:
+            return Curvature.Left;
+          case Quadrant.PositiveX:
+          case Quadrant.NegativeX:
+            return Curvature.Colinear;
+          default:
+            return Curvature.Right;
+        }
+      case Quadrant.PostiveY:
+        switch (other.quadrant) {
+          case Quadrant.II:
+          case Quadrant.III:
+          case Quadrant.NegativeX:
+            return Curvature.Left;
+          case Quadrant.PostiveY:
+          case Quadrant.NegativeY:
+            return Curvature.Colinear;
           default:
             return Curvature.Right;
         }
       case Quadrant.NegativeX:
         switch (other.quadrant) {
+          case Quadrant.I:
+          case Quadrant.II:
+          case Quadrant.PostiveY:
+            return Curvature.Right;
           case Quadrant.PositiveX:
           case Quadrant.NegativeX:
             return Curvature.Colinear;
-          case Quadrant.I:
-          case Quadrant.PostiveY:
-          case Quadrant.II:
-            return Curvature.Right;
           default:
             return Curvature.Left;
-        }
-      case Quadrant.III:
-        switch (other.quadrant) {
-          case Quadrant.III:
-            return other.slope! > this.slope!
-              ? Curvature.Left
-              : Curvature.Right;
-          case Quadrant.NegativeY:
-          case Quadrant.IV:
-          case Quadrant.PositiveX:
-            return Curvature.Left;
-          case Quadrant.I:
-            return other.slope! < this.slope!
-              ? Curvature.Left
-              : Curvature.Right;
-          default:
-            return Curvature.Right;
         }
       case Quadrant.NegativeY:
         switch (other.quadrant) {
+          case Quadrant.II:
+          case Quadrant.III:
+          case Quadrant.NegativeX:
+            return Curvature.Right;
           case Quadrant.PostiveY:
           case Quadrant.NegativeY:
             return Curvature.Colinear;
-          case Quadrant.II:
-          case Quadrant.NegativeX:
-          case Quadrant.III:
-            return Curvature.Right;
           default:
             return Curvature.Left;
-        }
-      case Quadrant.IV:
-        switch (other.quadrant) {
-          case Quadrant.IV:
-            return other.slope! > this.slope!
-              ? Curvature.Left
-              : Curvature.Right;
-          case Quadrant.PositiveX:
-          case Quadrant.I:
-          case Quadrant.PostiveY:
-            return Curvature.Left;
-          case Quadrant.II:
-            return other.slope! < this.slope!
-              ? Curvature.Left
-              : Curvature.Right;
-          default:
-            return Curvature.Right;
         }
     }
   }

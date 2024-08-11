@@ -283,105 +283,105 @@
         return "colinear" /* Colinear */;
       if (this.slope === other.slope) return "colinear" /* Colinear */;
       switch (this.quadrant) {
-        case 0 /* PositiveX */:
-          switch (other.quadrant) {
-            case 0 /* PositiveX */:
-            case 4 /* NegativeX */:
-              return "colinear" /* Colinear */;
-            case 1 /* I */:
-            case 2 /* PostiveY */:
-            case 3 /* II */:
-              return "left" /* Left */;
-            default:
-              return "right" /* Right */;
-          }
         case 1 /* I */:
           switch (other.quadrant) {
+            case 3 /* II */:
+            case 2 /* PostiveY */:
+            case 4 /* NegativeX */:
+              return "left" /* Left */;
             case 1 /* I */:
               return other.slope > this.slope ? "left" /* Left */ : "right" /* Right */;
-            case 2 /* PostiveY */:
-            case 3 /* II */:
-            case 4 /* NegativeX */:
-              return "left" /* Left */;
             case 5 /* III */:
               return other.slope < this.slope ? "left" /* Left */ : "right" /* Right */;
-            default:
-              return "right" /* Right */;
-          }
-        case 2 /* PostiveY */:
-          switch (other.quadrant) {
-            case 2 /* PostiveY */:
-            case 6 /* NegativeY */:
-              return "colinear" /* Colinear */;
-            case 3 /* II */:
-            case 4 /* NegativeX */:
-            case 5 /* III */:
-              return "left" /* Left */;
             default:
               return "right" /* Right */;
           }
         case 3 /* II */:
           switch (other.quadrant) {
-            case 3 /* II */:
-              return other.slope > this.slope ? "left" /* Left */ : "right" /* Right */;
-            case 4 /* NegativeX */:
             case 5 /* III */:
+            case 4 /* NegativeX */:
             case 6 /* NegativeY */:
               return "left" /* Left */;
+            case 3 /* II */:
+              return other.slope > this.slope ? "left" /* Left */ : "right" /* Right */;
             case 7 /* IV */:
               return other.slope < this.slope ? "left" /* Left */ : "right" /* Right */;
+            default:
+              return "right" /* Right */;
+          }
+        case 5 /* III */:
+          switch (other.quadrant) {
+            case 7 /* IV */:
+            case 6 /* NegativeY */:
+            case 0 /* PositiveX */:
+              return "left" /* Left */;
+            case 5 /* III */:
+              return other.slope > this.slope ? "left" /* Left */ : "right" /* Right */;
+            case 1 /* I */:
+              return other.slope < this.slope ? "left" /* Left */ : "right" /* Right */;
+            default:
+              return "right" /* Right */;
+          }
+        case 7 /* IV */:
+          switch (other.quadrant) {
+            case 1 /* I */:
+            case 0 /* PositiveX */:
+            case 2 /* PostiveY */:
+              return "left" /* Left */;
+            case 3 /* II */:
+              return other.slope < this.slope ? "left" /* Left */ : "right" /* Right */;
+            case 7 /* IV */:
+              return other.slope > this.slope ? "left" /* Left */ : "right" /* Right */;
+            default:
+              return "right" /* Right */;
+          }
+        case 0 /* PositiveX */:
+          switch (other.quadrant) {
+            case 1 /* I */:
+            case 3 /* II */:
+            case 2 /* PostiveY */:
+              return "left" /* Left */;
+            case 0 /* PositiveX */:
+            case 4 /* NegativeX */:
+              return "colinear" /* Colinear */;
+            default:
+              return "right" /* Right */;
+          }
+        case 2 /* PostiveY */:
+          switch (other.quadrant) {
+            case 3 /* II */:
+            case 5 /* III */:
+            case 4 /* NegativeX */:
+              return "left" /* Left */;
+            case 2 /* PostiveY */:
+            case 6 /* NegativeY */:
+              return "colinear" /* Colinear */;
             default:
               return "right" /* Right */;
           }
         case 4 /* NegativeX */:
           switch (other.quadrant) {
+            case 1 /* I */:
+            case 3 /* II */:
+            case 2 /* PostiveY */:
+              return "right" /* Right */;
             case 0 /* PositiveX */:
             case 4 /* NegativeX */:
               return "colinear" /* Colinear */;
-            case 1 /* I */:
-            case 2 /* PostiveY */:
-            case 3 /* II */:
-              return "right" /* Right */;
             default:
               return "left" /* Left */;
-          }
-        case 5 /* III */:
-          switch (other.quadrant) {
-            case 5 /* III */:
-              return other.slope > this.slope ? "left" /* Left */ : "right" /* Right */;
-            case 6 /* NegativeY */:
-            case 7 /* IV */:
-            case 0 /* PositiveX */:
-              return "left" /* Left */;
-            case 1 /* I */:
-              return other.slope < this.slope ? "left" /* Left */ : "right" /* Right */;
-            default:
-              return "right" /* Right */;
           }
         case 6 /* NegativeY */:
           switch (other.quadrant) {
+            case 3 /* II */:
+            case 5 /* III */:
+            case 4 /* NegativeX */:
+              return "right" /* Right */;
             case 2 /* PostiveY */:
             case 6 /* NegativeY */:
               return "colinear" /* Colinear */;
-            case 3 /* II */:
-            case 4 /* NegativeX */:
-            case 5 /* III */:
-              return "right" /* Right */;
             default:
               return "left" /* Left */;
-          }
-        case 7 /* IV */:
-          switch (other.quadrant) {
-            case 7 /* IV */:
-              return other.slope > this.slope ? "left" /* Left */ : "right" /* Right */;
-            case 0 /* PositiveX */:
-            case 1 /* I */:
-            case 2 /* PostiveY */:
-              return "left" /* Left */;
-            case 3 /* II */:
-              return other.slope < this.slope ? "left" /* Left */ : "right" /* Right */;
-            default:
-              return "right" /* Right */;
           }
       }
     }
