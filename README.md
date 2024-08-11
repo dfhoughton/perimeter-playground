@@ -20,7 +20,7 @@ into a binary search tree to rapidly determine whether the perimeter contained a
 I wanted to do these things, and I wanted to do them with algorithms which avoided as much as possible expensive transcendental
 functions -- trigonometry and square roots. And when I was done, I wanted to watch the algorithm work.
 
-So the code in this project consists of a `GraphicalTutor`, which fascilitates representing any algorithm as an animation, some
+So the code in this project consists of a `GraphicalTutor`, which facilitates representing any algorithm as an animation, some
 general geometric classes -- point, segment, vector, triangle, circle -- and some algorithms specific to perimeters. The point
 is not to invent a better algorithm, since this is well-trodden ground, but to have fun reinventing algorithms, and to produce
 something one could use to explain these algorithms.
@@ -60,11 +60,15 @@ It might be possible to make this algorithm more efficient by optimizing the sca
 
 ## Interface
 
-The point of this was partly to play with this particular algorithm, but partly simply to create a framework to facilitate visualizing algorithms generally. One could pop `GraphicalTutor` out and make a nicer interface. This repo, though, provides a simple interface via the `index.html` file that sits alongside this README. 
+The point of this was partly to play with this particular algorithm, but partly simply to create a framework to facilitate visualizing algorithms generally. One could pop `GraphicalTutor` out and make a nicer interface. This repo, though, provides a simple interface via the `index.html` file that sits alongside this README. The build script builds `main.ts` into `bundle.js`. I have included this in the repo so one can use the interface simply by cloning the repo then opening `index.html`.
+
+The central object in the interface is a square canvas. You can draw a perimeter by clicking in this canvax. Any point you add will be joined to the most recently added point by a segment. The points you have added will be listed to the right. When you click "go" the algorithm is run, generating an animation via `GraphicalTutor`. The animation begins playing immediately. You can speed up or slow down the frame rate with the slider above the canvas. The steps of the algorithm will be displayed in a column to the left of the canvas.
+
+If you find an interesting perimeter, you can copy and save its points in a text file. Later you can paste them back into the text area below the canvas and click "load". This will load the saved perimeter back into the canvas. The loading code is simply a regular expression that scans the text for things that look like points. Anything else you type in will be ignored. Also, the load button will be disabled until the scanner finds at least one point.
 
 ## Dedication
 
-This project is dedicated, like all my projects, to my son Jude, known on github as [TurkeyMcMac]( https://github.com/TurkeyMcMac). He would have appreciated this
+This project is dedicated, like all my projects, to my son Jude, known on github as [TurkeyMcMac](https://github.com/TurkeyMcMac). He would have appreciated this
 more than anyone. It's the sort of thing he might have done himself. He would have done it better and with less gassing about.
 
 I miss you, Jude. You were the best person I've ever known. I love you.
