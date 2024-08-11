@@ -295,7 +295,7 @@ function main() {
       depth = 0;
     }
     const curvature = determineConvexDirection(segments);
-    if (depth! > 50) throw "improbable level of recursion";
+    if (depth! > 1000) throw "improbable level of recursion";
     if (segments.length < 3) throw "insufficient segments";
     if (segments.length === 3) return convexities; // a triangle is always convex
     // do one cycle, possibly recursing
