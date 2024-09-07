@@ -912,6 +912,7 @@
           const centroids = findCentroids(convexities);
           describeAlgorithmStep("Coalescing Centroids");
           coalesceCentroids(centroids);
+          event(`frames: ${tutor.pending.length.toLocaleString()}`);
           c.innerHTML = "stop";
           tutor.go(() => {
             c.innerHTML = "go";
