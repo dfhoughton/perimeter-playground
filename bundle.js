@@ -161,11 +161,7 @@
         } else {
           if (this.slope === null) {
             if (other.slope === 0) {
-              if (this.yMin >= other.yMin && this.yMax <= other.yMin && other.xMin >= this.xMin && other.xMax <= this.yMin) {
-                return new Point(this.xMin, other.yMin);
-              } else {
-                return null;
-              }
+              return new Point(this.xMin, other.yMin);
             } else {
               const y = other.slope * this.xMin + other.intercept;
               if (y >= this.yMin && y <= this.yMax) {
@@ -176,11 +172,7 @@
             }
           } else if (this.slope === 0) {
             if (other.slope === null) {
-              if (other.yMin >= this.yMin && other.yMax <= this.yMin && this.xMin >= other.xMin && this.xMax <= other.yMin) {
-                return new Point(other.xMin, this.yMin);
-              } else {
-                return null;
-              }
+              return new Point(other.xMin, this.yMin);
             } else {
               const x = (this.yMin - other.intercept) / other.slope;
               if (x >= this.xMin && x <= this.xMax && x >= other.xMin && x <= other.xMax) {
@@ -851,9 +843,26 @@
       tutor.drawAll();
     };
     canvas.onclick = (e) => {
-      if (!tutor.fresh()) return;
       const point = tutor.cartesian(e.offsetX, e.offsetY);
-      addPoint(point);
+      if (tutor.fresh()) {
+        addPoint(point);
+      } else {
+        showWhereIClickedAndTheNearestPointOnThePerimeter(point);
+      }
+    };
+    const showWhereIClickedAndTheNearestPointOnThePerimeter = (point) => {
+      let nearest = points[0];
+      let d = Number.MAX_VALUE;
+      for (let i = 1; i < points.length; i++) {
+        const p = points[i];
+        const d2 = (point[0] - p[0]) ** 2 + (point[1] - p[1]) ** 2;
+        if (d2 < d) {
+          nearest = p;
+          d = d2;
+        }
+      }
+      const r = ([x, y]) => `(${x}, ${y})`;
+      console.log({ clicked: r(point), nearest: r(nearest) });
     };
     const load = document.getElementById("load-data");
     const loadButton = document.getElementById("load");

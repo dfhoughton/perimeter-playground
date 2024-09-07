@@ -178,17 +178,8 @@ export class Segment extends Geometry {
       } else {
         if (this.slope === null) {
           if (other.slope === 0) {
-            // these necessarily intersect, if at all
-            if (
-              this.yMin >= other.yMin &&
-              this.yMax <= other.yMin &&
-              other.xMin >= this.xMin &&
-              other.xMax <= this.yMin
-            ) {
-              return new Point(this.xMin, other.yMin);
-            } else {
-              return null;
-            }
+            // these necessarily intersect
+            return new Point(this.xMin, other.yMin);
           } else {
             const y = other.slope! * this.xMin + other.intercept!;
             if (y >= this.yMin && y <= this.yMax) {
@@ -199,17 +190,8 @@ export class Segment extends Geometry {
           }
         } else if (this.slope === 0) {
           if (other.slope === null) {
-            // these necessarily intersect, if at all
-            if (
-              other.yMin >= this.yMin &&
-              other.yMax <= this.yMin &&
-              this.xMin >= other.xMin &&
-              this.xMax <= other.yMin
-            ) {
-              return new Point(other.xMin, this.yMin);
-            } else {
-              return null;
-            }
+            // these necessarily intersect
+            return new Point(other.xMin, this.yMin);
           } else {
             const x = (this.yMin - other.intercept!) / other.slope!;
             if (

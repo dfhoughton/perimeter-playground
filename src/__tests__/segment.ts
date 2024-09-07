@@ -103,4 +103,26 @@ describe("Segment", () => {
     test(`${s1.describe()} intersects ${s2.describe()} at (4/3, 4/3)`, () =>
       expect(intersection.y()).toBeCloseTo(4 / 3));
   });
+
+  describe("intersection of vertical and horizonal", () => {
+    const horizontal = new Segment(
+      new Point(11.4, -10.9),
+      new Point(13.4, -10.9)
+    );
+    const vertical = new Segment(new Point(12.3, -11.6), new Point(12.3, -9.6));
+    let intersection = horizontal.intersection(vertical) as Point;
+    test(`${horizontal.describe()} intersects ${vertical.describe()}`, () =>
+      expect(intersection).toBeDefined());
+    test(`${horizontal.describe()} intersects ${vertical.describe()} at (12.3, -10.9)`, () =>
+      expect(intersection.x()).toBe(12.3));
+    test(`${horizontal.describe()} intersects ${vertical.describe()} at (12.3, -10.9)`, () =>
+      expect(intersection.y()).toBe(-10.9));
+    intersection = vertical.intersection(horizontal) as Point;
+    test(`${horizontal.describe()} intersects ${vertical.describe()}`, () =>
+      expect(intersection).toBeDefined());
+    test(`${horizontal.describe()} intersects ${vertical.describe()} at (12.3, -10.9)`, () =>
+      expect(intersection.x()).toBe(12.3));
+    test(`${horizontal.describe()} intersects ${vertical.describe()} at (12.3, -10.9)`, () =>
+      expect(intersection.y()).toBe(-10.9));
+  });
 });

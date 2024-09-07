@@ -72,9 +72,30 @@ function main() {
     tutor.drawAll();
   };
   canvas.onclick = (e) => {
-    if (!tutor.fresh()) return;
     const point = tutor.cartesian(e.offsetX, e.offsetY);
-    addPoint(point);
+    if (tutor.fresh()) {
+      // draw point on canvas
+      addPoint(point);
+    } else {
+      // emit some debugging information
+      showWhereIClickedAndTheNearestPointOnThePerimeter(point);
+    }
+  };
+  const showWhereIClickedAndTheNearestPointOnThePerimeter = (
+    point: [number, number]
+  ) => {
+    let nearest = points[0];
+    let d = Number.MAX_VALUE;
+    for (let i = 1; i < points.length; i++) {
+      const p = points[i];
+      const d2 = (point[0] - p[0]) ** 2 + (point[1] - p[1]) ** 2;
+      if (d2 < d) {
+        nearest = p;
+        d = d2;
+      }
+    }
+    const r = ([x, y]: [number, number]) => `(${x}, ${y})`;
+    console.log({ clicked: r(point), nearest: r(nearest) });
   };
   const load = document.getElementById("load-data")! as HTMLTextAreaElement;
   const loadButton = document.getElementById("load")! as HTMLButtonElement;
