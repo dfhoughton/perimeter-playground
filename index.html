@@ -43,11 +43,45 @@
         font-size: larger;
         font-weight: 600;
       }
+      /* borrowed from https://stackoverflow.com/a/54827499*/
+      .infolink:after {
+        content: "?";
+        display: inline-block;
+        font-family: sans-serif;
+        font-weight: bold;
+        text-align: center;
+        font-size: 0.8em;
+        line-height: 0.8em;
+        border-radius: 50%;
+        margin-left: 6px;
+        padding: 0.13em 0.2em 0.09em 0.2em;
+        color: inherit;
+        border: 1px solid;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .hidden {
+        display: none;
+      }
+      .info {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border: 1px solid lightgray;
+        border-radius: 1rem;
+      }
     </style>
     <script src="bundle.js"></script>
   </head>
   <body>
-    <h1>Perimeter Playground</h1>
+    <h1>
+      Perimeter Playground
+      <span class="infolink" data-collapse-target="instructions"></span>
+    </h1>
+    <div id="instructions" class="hidden info">
+      Click about in the canvas below to draw a perimeter. When you are ready to
+      close it, click "go" and watch the algorithm calculate the perimeter's
+      centroid and area.
+    </div>
     <div id="columns">
       <div class="col">
         <h2>Algorithm</h2>
@@ -91,5 +125,12 @@
         <div id="points"></div>
       </div>
     </div>
+    <script type="text/javascript">
+      document.querySelector("[data-collapse-target]").onclick = function (e) {
+        document
+          .getElementById(e.target.getAttribute("data-collapse-target"))
+          .classList.toggle("hidden");
+      };
+    </script>
   </body>
 </html>

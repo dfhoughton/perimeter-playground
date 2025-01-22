@@ -60,6 +60,8 @@ It might be possible to make this algorithm more efficient by optimizing the sca
 
 ## Interface
 
+[Try it!](https://dfhoughton.github.io/perimeter-playground/)
+
 The point of this was partly to play with this particular algorithm, but partly simply to create a framework to facilitate visualizing algorithms generally. One could pop `GraphicalTutor` out and make a nicer interface. This repo, though, provides a simple interface via the `index.html` file that sits alongside this README. The build script builds `main.ts` into `bundle.js`. I have included this in the repo so one can use the interface simply by cloning the repo then opening `index.html`.
 
 The central object in the interface is a square canvas. You can draw a perimeter by clicking in this canvax. Any point you add will be joined to the most recently added point by a segment. The points you have added will be listed to the right. When you click "go" the algorithm is run, generating an animation via `GraphicalTutor`. The animation begins playing immediately. You can speed up or slow down the frame rate with the slider above the canvas. The steps of the algorithm will be displayed in a column to the left of the canvas.
